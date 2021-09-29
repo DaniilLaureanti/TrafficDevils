@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.net.InetSocketAddress;
+
 public class MainActivity extends AppCompatActivity {
 
     private final int ITEM_GAME = 0;
@@ -44,10 +46,15 @@ public class MainActivity extends AppCompatActivity {
             showFragmentWebView();
 
         } else if (item.getItemId() == ITEM_LOAD_SERVER) {
-            toastShow(item);
-
+//            toastShow(item);
+                readFromServer();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void readFromServer() {
+        Client client = new Client();
+        client.read(new InetSocketAddress("192.168.0.103", 6789));
     }
 
     private void toastShow(String message) {

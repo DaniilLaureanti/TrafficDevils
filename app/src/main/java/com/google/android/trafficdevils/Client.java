@@ -14,6 +14,11 @@ public class Client {
     private static final String QUERY = "get";
     private static final String ERROR_CODE = "error";
     private Socket socket;
+    private OnReadFromServerListener listener;
+
+    public void setListener(OnReadFromServerListener listener) {
+        this.listener = listener;
+    }
 
     public void read(InetSocketAddress socketAddress){
         ConnectTask connectTask = new ConnectTask();
@@ -63,5 +68,17 @@ public class Client {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(listener != null) {
+                listener.action(s);
+            }
+        }
+    }
+
+    interface OnReadFromServerListener{
+        void action(String s);
     }
 }

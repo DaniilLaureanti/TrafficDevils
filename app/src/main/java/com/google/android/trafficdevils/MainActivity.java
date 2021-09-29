@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebViewFragment webViewFragment;
     private GameFragment gameFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == ITEM_GAME) {
             showFragmentGame();
+            toastShow(item);
 
         } else if (item.getItemId() == ITEM_WEB) {
             showFragmentWebView();
+            toastShow(item);
 
         } else if (item.getItemId() == ITEM_LOAD_SERVER) {
-//            toastShow(item);
+            toastShow(item);
                 readFromServer();
         }
         return super.onOptionsItemSelected(item);
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void readFromServer() {
         Client client = new Client();
+        client.setListener((s)-> toastShow(s));
         client.read(new InetSocketAddress("192.168.0.103", 6789));
     }
 
@@ -78,5 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fcView, gameFragment)
                 .commit();
     }
+
+
 
 }

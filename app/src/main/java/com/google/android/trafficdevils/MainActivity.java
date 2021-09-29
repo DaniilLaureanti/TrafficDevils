@@ -10,11 +10,20 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int ITEM_GAME = 0;
+    private final int ITEM_WEB = 1;
+    private final int ITEM_LOAD_SERVER = 2;
+
+    private WebViewFragment webViewFragment;
+    private GameFragment gameFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        webViewFragment = new WebViewFragment();
+        gameFragment = new GameFragment();
 
     }
 
@@ -28,15 +37,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == 0){
+        if (item.getItemId() == ITEM_GAME) {
+            showFragmentGame();
 
-            toastShow(item);
+        } else if (item.getItemId() == ITEM_WEB) {
+            showFragmentWebView();
 
-        }else if (item.getItemId() == 1){
-
-            toastShow(item);
-
-        }else if (item.getItemId() == 2){
+        } else if (item.getItemId() == ITEM_LOAD_SERVER) {
             toastShow(item);
 
         }
@@ -51,7 +58,18 @@ public class MainActivity extends AppCompatActivity {
         toastShow(item.getTitle().toString());
     }
 
+    private void showFragmentWebView() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcView, webViewFragment)
+                .commit();
+    }
 
-
+    private void showFragmentGame() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcView, gameFragment)
+                .commit();
+    }
 
 }

@@ -2,9 +2,14 @@ package com.google.android.trafficdevils;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class Game {
 
@@ -22,22 +27,28 @@ public class Game {
     private LinearLayout llFooter;
     private ImageView newImageView;
 
+    private ArrayList<Integer> shapePoints;
 
     public Game(GameFragment gf) {
         this.gf = gf;
         rlGame = gf.getLlGame();
         llFooter = gf.getLlFooter();
+        shapePoints = new ArrayList<>();
+        shapePoints.add(1);
+        shapePoints.add(2);
+        shapePoints.add(3);
+
     }
 
     public void start() {
-        addImages();
+        addImagesAndSetPoins();
     }
 
     public void stop() {
 
     }
 
-    private void addImage(int num) {
+    private ImageView addImage(int num) {
         Drawable drawable = getDrawGreen();
         if (num == DRAW_GREEN) {
             drawable = getDrawGreen();
@@ -47,10 +58,10 @@ public class Game {
             drawable = getDrawBlue();
         }
         RelativeLayout.LayoutParams params = getLayoutParams();
-        createNewImage(drawable, params);
+        return createNewImage(drawable, params);
     }
 
-    private void createNewImage(Drawable drawable, RelativeLayout.LayoutParams params) {
+    private ImageView createNewImage(Drawable drawable, RelativeLayout.LayoutParams params) {
         newImageView = new ImageView(gf.getContext());
         newImageView.setImageDrawable(drawable);
         newImageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -59,16 +70,32 @@ public class Game {
 
         newImageView.setOnClickListener(v -> {
             removeImages();
-            addImages();
-            point++;
+            addImagesAndSetPoins();
+            point += (Integer) v.getTag();
             gf.setTextPoint(point);
         });
+
+        return newImageView;
     }
 
-    private void addImages() {
-        addImage(DRAW_GREEN);
-        addImage(DRAW_BLUE);
-        addImage(DRAW_RED);
+
+    private void addImagesAndSetPoins() {
+        Collections.shuffle(shapePoints);
+
+        ImageView iv;
+        iv = addImage(DRAW_GREEN);
+        iv.setTag(shapePoints.get(0));
+
+        iv = addImage(DRAW_BLUE);
+        iv.setTag(shapePoints.get(1));
+
+        iv = addImage(DRAW_RED);
+        iv.setTag(shapePoints.get(2));
+
+        gf.setPointsToTv(
+                shapePoints.get(0),
+                shapePoints.get(1),
+                shapePoints.get(2));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

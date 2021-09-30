@@ -22,6 +22,9 @@ public class GameFragment extends Fragment {
     private int gameFieldWidth;
 
     private TextView tvPoints;
+    private TextView tvShape1;
+    private TextView tvShape2;
+    private TextView tvShape3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +34,9 @@ public class GameFragment extends Fragment {
         rlGame = view.findViewById(R.id.rlGame);
         llFooter = view.findViewById(R.id.llFooter);
         tvPoints = view.findViewById(R.id.tvPoints);
+        tvShape1 = view.findViewById(R.id.tvShape1);
+        tvShape2 = view.findViewById(R.id.tvShape2);
+        tvShape3 = view.findViewById(R.id.tvShape3);
 
         game = new Game(this);
         game.start();
@@ -69,5 +75,11 @@ public class GameFragment extends Fragment {
 
     private void toastShow(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setPointsToTv(int... points) {
+        tvShape1.setText(String.valueOf(points[0]));
+        tvShape2.setText(String.valueOf(points[1]));
+        tvShape3.setText(String.valueOf(points[2]));
     }
 }

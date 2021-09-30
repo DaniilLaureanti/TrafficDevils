@@ -6,11 +6,11 @@ import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameFragment extends Fragment {
@@ -18,8 +18,10 @@ public class GameFragment extends Fragment {
     private LinearLayout llFooter;
     private Game game;
 
-    private int rlGameWorkH;
-    private int rlGameWorkW;
+    private int gameFieldHeight;
+    private int gameFieldWidth;
+
+    private TextView tvPoints;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,20 +30,25 @@ public class GameFragment extends Fragment {
 
         rlGame = view.findViewById(R.id.rlGame);
         llFooter = view.findViewById(R.id.llFooter);
+        tvPoints = view.findViewById(R.id.tvPoints);
 
         game = new Game(this);
         game.start();
         setWorkSize();
-        toastShow(rlGameWorkH + " " + rlGameWorkW);
+        toastShow(gameFieldHeight + " " + gameFieldWidth);
         return view;
+    }
+
+    public void setTextPoint(int point){
+        tvPoints.setText(String.valueOf(point));
     }
 
     private void setWorkSize() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-        rlGameWorkH = displayMetrics.heightPixels;
-        rlGameWorkW = displayMetrics.widthPixels;
-        rlGameWorkH -= rlGameWorkH * 0.25;
+        gameFieldHeight = displayMetrics.heightPixels;
+        gameFieldWidth = displayMetrics.widthPixels;
+        gameFieldHeight -= gameFieldHeight * 0.25;
     }
 
     public RelativeLayout getLlGame() {
@@ -52,16 +59,12 @@ public class GameFragment extends Fragment {
         return llFooter;
     }
 
-    public int getRlGameWorkHeight() {
-        return rlGameWorkH;
+    public int getGameFieldHeight() {
+        return gameFieldHeight;
     }
 
-    public int getRlGameWorkWidth() {
-        return rlGameWorkW;
-    }
-
-    public void setImage() {
-
+    public int getGameFieldWidth() {
+        return gameFieldWidth;
     }
 
     private void toastShow(String message) {

@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class Game {
 
@@ -49,6 +50,8 @@ public class Game {
         newImageView.setOnClickListener(v -> {
             removeImage();
             addImage();
+            point++;
+            gf.setTextPoint(point);
         });
     }
 
@@ -65,8 +68,9 @@ public class Game {
         params.width = NEW_IMAGE_SIZE_WIDTH;
         params.height = NEW_IMAGE_SIZE_HEIGHT;
 
-        params.leftMargin = random(NEW_IMAGE_SIZE_WIDTH, gf.getRlGameWorkWidth() - NEW_IMAGE_SIZE_WIDTH - 10);
-        params.topMargin = random(NEW_IMAGE_SIZE_HEIGHT, gf.getRlGameWorkHeight() - NEW_IMAGE_SIZE_HEIGHT - 10);//
+        params.leftMargin = random(NEW_IMAGE_SIZE_WIDTH, gf.getGameFieldWidth() - NEW_IMAGE_SIZE_WIDTH);
+        params.topMargin = random(NEW_IMAGE_SIZE_HEIGHT, gf.getGameFieldHeight() - NEW_IMAGE_SIZE_HEIGHT);
+        Toast.makeText(rlGame.getContext(), params.topMargin  + " " + params.leftMargin, Toast.LENGTH_SHORT).show();
 
         return params;
     }

@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private GameFragment gameFragment;
     private EmptyFragment emptyFragment;
 
+    int rlGameHeight;
+    int rlGameWidth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,4 +107,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//
+//        if(gameFragment!=null) {
+//            rlGameHeight = gameFragment.getLlGame().getHeight();
+//            rlGameWidth = gameFragment.getLlGame().getWidth();
+//            toastShow(rlGameHeight + " " + rlGameWidth);
+//        }
+//    }
 }

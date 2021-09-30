@@ -13,6 +13,7 @@ public class Client {
 
     private static final String QUERY = "get";
     private static final String ERROR_CODE = "error";
+    private static final int TIMEOUT = 3000;
     private Socket socket;
     private OnReadFromServerListener listener;
 
@@ -33,7 +34,7 @@ public class Client {
             String retValue = ERROR_CODE;
             try {
                 socket = new Socket();
-                socket.connect(socketAddress, 5000);
+                socket.connect(socketAddress, TIMEOUT);
                 if (socket.isConnected()){
                     sendQuery();
                     retValue = readAnswer();

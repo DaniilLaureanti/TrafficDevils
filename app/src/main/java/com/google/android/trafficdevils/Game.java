@@ -123,7 +123,6 @@ public class Game {
 
         params.leftMargin = random(NEW_IMAGE_SIZE_WIDTH, gf.getGameFieldWidth() - NEW_IMAGE_SIZE_WIDTH);
         params.topMargin = random(NEW_IMAGE_SIZE_HEIGHT, gf.getGameFieldHeight() - NEW_IMAGE_SIZE_HEIGHT);
-//        Toast.makeText(rlGame.getContext(), params.topMargin  + " x " + params.leftMargin, Toast.LENGTH_SHORT).show();
 
         return params;
     }

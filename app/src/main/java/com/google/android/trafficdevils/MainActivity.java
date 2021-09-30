@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebViewFragment webViewFragment;
     private GameFragment gameFragment;
+    private EmptyFragment emptyFragment;
 
 
     @Override
@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         webViewFragment = new WebViewFragment();
         gameFragment = new GameFragment();
+        emptyFragment = new EmptyFragment();
 
+        readFromServer();
     }
 
     @Override
@@ -58,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void readFromServer() {
         Client client = new Client();
-        client.setListener((s)-> toastShow(s));
-        client.read(new InetSocketAddress("192.168.0.103", 6789));
+        client.setListener(this::choiceMode);
+        client.read(new InetSocketAddress("192.168.0.7", 6788));
     }
 
     private void toastShow(String message) {
@@ -84,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void showEmptyFragment(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcView, emptyFragment)
+                .commit();
+    }
 
+    public void choiceMode(String serverResult){
+        if (serverResult.equals("true")){
+            showFragmentWebView();
+        } else if(serverResult.equals("false")) {
+            showFragmentGame();
+        } else {
+            toastShow("Failed read from Server");
+            showEmptyFragment();
+        }
+    }
 
 }

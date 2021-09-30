@@ -10,5 +10,5 @@
         android:id="@+id/fcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.google.android.trafficdevils.WebViewFragment" />
+        android:name="com.google.android.trafficdevils.EmptyFragment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

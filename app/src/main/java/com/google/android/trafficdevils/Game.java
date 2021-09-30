@@ -5,9 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class Game {
+
+    private static final int DRAW_GREEN = 0;
+    private static final int DRAW_RED = 1;
+    private static final int DRAW_BLUE = 2;
 
     private final int NEW_IMAGE_SIZE_WIDTH = 200;
     private final int NEW_IMAGE_SIZE_HEIGHT = 200;
@@ -27,16 +30,23 @@ public class Game {
     }
 
     public void start() {
-        addImage();
+        addImages();
     }
 
     public void stop() {
 
     }
 
-    private void addImage() {
+    private void addImage(int num) {
+        Drawable drawable = getDrawGreen();
+        if (num == DRAW_GREEN) {
+            drawable = getDrawGreen();
+        } else if (num == DRAW_RED) {
+            drawable = getDrawRed();
+        } else if (num == DRAW_BLUE) {
+            drawable = getDrawBlue();
+        }
         RelativeLayout.LayoutParams params = getLayoutParams();
-        Drawable drawable = randomImage();
         createNewImage(drawable, params);
     }
 
@@ -48,16 +58,32 @@ public class Game {
         rlGame.addView(newImageView);
 
         newImageView.setOnClickListener(v -> {
-            removeImage();
-            addImage();
+            removeImages();
+            addImages();
             point++;
             gf.setTextPoint(point);
         });
     }
 
+    private void addImages() {
+        addImage(DRAW_GREEN);
+        addImage(DRAW_BLUE);
+        addImage(DRAW_RED);
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
-    private Drawable randomImage() {
-        return gf.getResources().getDrawable(R.drawable.ic_launcher_background);
+    private Drawable getDrawGreen() {
+        return gf.getResources().getDrawable(R.drawable.draw_green);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private Drawable getDrawRed() {
+        return gf.getResources().getDrawable(R.drawable.draw_red);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private Drawable getDrawBlue() {
+        return gf.getResources().getDrawable(R.drawable.draw_blue);
     }
 
     public RelativeLayout.LayoutParams getLayoutParams() {
@@ -70,7 +96,7 @@ public class Game {
 
         params.leftMargin = random(NEW_IMAGE_SIZE_WIDTH, gf.getGameFieldWidth() - NEW_IMAGE_SIZE_WIDTH);
         params.topMargin = random(NEW_IMAGE_SIZE_HEIGHT, gf.getGameFieldHeight() - NEW_IMAGE_SIZE_HEIGHT);
-        Toast.makeText(rlGame.getContext(), params.topMargin  + " " + params.leftMargin, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(rlGame.getContext(), params.topMargin  + " x " + params.leftMargin, Toast.LENGTH_SHORT).show();
 
         return params;
     }
@@ -88,8 +114,8 @@ public class Game {
         return random(0, max);
     }
 
-    public void removeImage(){
-        rlGame.removeViewAt(0);
+    public void removeImages(){
+        rlGame.removeAllViews();
     }
 
 }

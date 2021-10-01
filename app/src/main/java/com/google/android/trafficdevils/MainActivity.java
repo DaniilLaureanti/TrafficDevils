@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         switchSettings = getSharedPreferences(APP_PREFERENCES, Activity.MODE_PRIVATE);
 
         start();
-        editSettings();
 
     }
 
@@ -63,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             showFragmentWebView();
 
         } else if (item.getItemId() == ITEM_LOAD_SERVER) {
-            readFromServer();
-            choiceMode(serverResult);
-            editSettings();
+            clearSettings();
+            start();
+            addSettings();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void readFromServer() {
         Client client = new Client();
-        client.setListener(this::getServerResultAndChoiceMode);
+        client.setListener(this::serverResultAndChoiceMode);
         client.read(new InetSocketAddress("192.168.0.7", 6788));
     }
 
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void getServerResultAndChoiceMode(String serverResult) {
+    public void serverResultAndChoiceMode(String serverResult) {
         saveServerResult(serverResult);
         choiceMode(serverResult);
     }
@@ -125,8 +124,10 @@ public class MainActivity extends AppCompatActivity {
     private void choiceMode(String s) {
         if (s.equals("true")) {
             showFragmentWebView();
+            addSettings();
         } else if (s.equals("false")) {
             showFragmentGame();
+            addSettings();
         } else {
             toastShow("Failed read from Server");
             showEmptyFragment();
@@ -137,9 +138,13 @@ public class MainActivity extends AppCompatActivity {
         serverResult = s;
     }
 
-    public void editSettings(){
+    public void addSettings(){
         editor = switchSettings.edit();
         editor.putString(APP_PREFERENCES_SWITCH, "true");
         editor.apply();
+    }
+
+    public void clearSettings(){
+        switchSettings.edit().clear().apply();
     }
 }

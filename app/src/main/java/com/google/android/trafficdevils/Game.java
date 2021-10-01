@@ -44,10 +44,6 @@ public class Game {
         addImagesAndSetPoins();
     }
 
-    public void stop() {
-
-    }
-
     private ImageView addImage(int num) {
         Drawable drawable = getDrawGreen();
         if (num == DRAW_GREEN) {
@@ -134,10 +130,6 @@ public class Game {
             max = tmp;
         }
         return (int) (Math.random() * (max - min)) + min;
-    }
-
-    public static int random(int max) {
-        return random(0, max);
     }
 
     public void removeImages(){

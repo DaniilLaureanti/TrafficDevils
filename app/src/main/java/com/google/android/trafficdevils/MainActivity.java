@@ -3,6 +3,8 @@ package com.google.android.trafficdevils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,13 +18,17 @@ public class MainActivity extends AppCompatActivity {
     private final int ITEM_WEB = 1;
     private final int ITEM_LOAD_SERVER = 2;
 
+    public static String APP_PREFERENCES = "settings";// это будет именем файла настроек
+    public static String APP_PREFERENCES_SWITCH = "switch"; // имя переключателя
+
     private WebViewFragment webViewFragment;
     private GameFragment gameFragment;
     private EmptyFragment emptyFragment;
 
-    int rlGameHeight;
-    int rlGameWidth;
+    private String serverResult = "false";
 
+    private SharedPreferences switchSettings;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
         gameFragment = new GameFragment();
         emptyFragment = new EmptyFragment();
 
-        readFromServer();
+        switchSettings = getSharedPreferences(APP_PREFERENCES, Activity.MODE_PRIVATE);
+
+        start();
+        editSettings();
+
     }
 
     @Override
@@ -48,31 +58,42 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == ITEM_GAME) {
             showFragmentGame();
-            toastShow(item);
 
         } else if (item.getItemId() == ITEM_WEB) {
             showFragmentWebView();
-            toastShow(item);
 
         } else if (item.getItemId() == ITEM_LOAD_SERVER) {
-            toastShow(item);
-                readFromServer();
+            readFromServer();
+            choiceMode(serverResult);
+            editSettings();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void start(){
+        checksApplicationSettings();
+    }
+
+    private void checksApplicationSettings(){
+        if (switchSettings.getString(APP_PREFERENCES_SWITCH, "false").equals("false")) {
+            readFromServer();
+        } else {
+            if (serverResult.equals("true")) {
+                showFragmentWebView();
+            } else {
+                showFragmentGame();
+            }
+        }
+    }
+
     private void readFromServer() {
         Client client = new Client();
-        client.setListener(this::choiceMode);
+        client.setListener(this::getServerResultAndChoiceMode);
         client.read(new InetSocketAddress("192.168.0.7", 6788));
     }
 
     private void toastShow(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void toastShow(MenuItem item) {
-        toastShow(item.getTitle().toString());
     }
 
     private void showFragmentWebView() {
@@ -89,17 +110,22 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void showEmptyFragment(){
+    private void showEmptyFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fcView, emptyFragment)
                 .commit();
     }
 
-    public void choiceMode(String serverResult){
-        if (serverResult.equals("true")){
+    public void getServerResultAndChoiceMode(String serverResult) {
+        saveServerResult(serverResult);
+        choiceMode(serverResult);
+    }
+
+    private void choiceMode(String s) {
+        if (s.equals("true")) {
             showFragmentWebView();
-        } else if(serverResult.equals("false")) {
+        } else if (s.equals("false")) {
             showFragmentGame();
         } else {
             toastShow("Failed read from Server");
@@ -107,14 +133,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//
-//        if(gameFragment!=null) {
-//            rlGameHeight = gameFragment.getLlGame().getHeight();
-//            rlGameWidth = gameFragment.getLlGame().getWidth();
-//            toastShow(rlGameHeight + " " + rlGameWidth);
-//        }
-//    }
+    public void saveServerResult(String s) {
+        serverResult = s;
+    }
+
+    public void editSettings(){
+        editor = switchSettings.edit();
+        editor.putString(APP_PREFERENCES_SWITCH, "true");
+        editor.apply();
+    }
 }

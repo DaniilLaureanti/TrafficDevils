@@ -41,7 +41,6 @@ public class GameFragment extends Fragment {
         game = new Game(this);
         game.start();
         setWorkSize();
-        toastShow(gameFieldHeight + " " + gameFieldWidth);
         return view;
     }
 
@@ -71,10 +70,6 @@ public class GameFragment extends Fragment {
 
     public int getGameFieldWidth() {
         return gameFieldWidth;
-    }
-
-    private void toastShow(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void setPointsToTv(int... points) {

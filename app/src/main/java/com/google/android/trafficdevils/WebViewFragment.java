@@ -1,5 +1,6 @@
 package com.google.android.trafficdevils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.webkit.WebViewClient;
 
 public class WebViewFragment extends Fragment {
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
